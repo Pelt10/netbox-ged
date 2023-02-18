@@ -1,0 +1,80 @@
+{% extends 'generic/object.html' %}
+{% load helpers %}
+{% block content %}
+  <div class="row mb-3">
+    <div class="col col-md-6">
+      <div class="card">
+        <h5 class="card-header">Document</h5>
+        <div class="card-body">
+          <table class="table table-hover attr-table">
+            <tr>
+              <th scope="row">Name</th>
+              <td>{{ object.name|placeholder }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Document Type</th>
+              <td>
+                  <span class="badge" style="background-color: #{{ object.document_type.color }}">{{ object.document_type.name }}</span>
+              </td>
+            </tr>
+            <tr>
+                <th scope="row">Filename</th>
+                <td><a href="{{ object.document.url }}" target="_blank">{{ object.filename }}</a></td>
+              </tr>
+              <tr>
+                <th scope="row">Size</th>
+                <td>{{ object.size|filesizeformat }}</td>
+              </tr>
+          </table>
+        </div>
+      </div>
+      {% include 'inc/panels/custom_fields.html' %}
+    </div>
+    <div class="col col-md-6">
+      {% include 'inc/panels/tags.html' %}
+      {% include 'inc/panels/comments.html' %}
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div class="col col-md-12">
+      <div class="card">
+        <h5 class="card-header">Document</h5>
+          <div class="card-body">
+            <table class="table table-hover attr-table">
+              <thead>
+                <tr>
+                    <th scope="col">Object ID</th>
+                    <th scope="col">Object Type</th>
+                    <th scope="col">Object Name</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                  {% for relative_objet in object.relative_objects.all %}
+                    <tr>
+                      <td>{{ relative_objet.object_content.id }}</td>
+                      <td>{{ relative_objet.content_type }}</td>
+                      <td>
+                          <a href="{{ relative_objet.object_content.get_absolute_url }}">
+                            {{ relative_objet.object_content.name }}
+                          </a>
+                      </td>
+                      <td>
+                        <a href="{% url 'plugins:netbox_ged:documentlink_delete' pk=relative_objet.id %}?return_url={{ object.get_absolute_url }}" class="btn btn-danger btn-sm lh-1" title="Delete Link">
+                          <i class="mdi mdi-trash-can-outline" aria-hidden="true"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  {% endfor %}
+            </table>
+          </div>
+          <div class="card-footer text-end noprint">
+            <a href="{% url 'plugins:netbox_ged:documentlink_add' %}?document={{ object.id }}&&return_url={{ request.path }}" class="btn btn-primary btn-sm">
+                <i class="mdi mdi-plus-thick" aria-hidden="true"></i>
+                Add Object Link
+            </a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

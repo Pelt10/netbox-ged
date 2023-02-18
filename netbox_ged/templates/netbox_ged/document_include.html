@@ -1,0 +1,56 @@
+{% load helpers %}
+
+<div class="card">
+<h5 class="card-header">
+    Documents
+</h5>
+<div class="card-body">
+{% if documents %}
+    <table class="table table-hover">
+        <tr>
+            <th>Name</th>
+            <th>Size</th>
+            <th>Type</th>
+            <th></th>
+        </tr>
+        {% for document in documents %}
+        <tr>
+            <td>
+                <a href="{% firstof document.external_url document.document.url %}" target="_blank">{% firstof document.name document.filename document.external_url %}</a>
+            </td>
+            <td>{% if document.size %}{{ document.size|filesizeformat }}{% else %}<span class="text-muted">—</span>{% endif %}</td>
+            <td>
+                <span class="badge" style="background-color: #{{ document.document_type.color }}">{{ document.document_type.name }}</span>
+            </td>
+            <td class="text-end noprint">
+                <a href="{{ document.document.url }}" class="btn btn-primary btn-sm lh-1" title="View Document">
+                    <i class="mdi mdi-eye" aria-hidden="true"></i>
+                  </a>                
+                  <a href="{% url 'plugins:netbox_ged:document' pk=document.pk %}" class="btn btn-warning btn-sm lh-1" title="Open Document">
+                    <i class="mdi mdi-book" aria-hidden="true"></i>
+                  </a>
+                  <a href="{% url 'plugins:netbox_ged:documentlink_delete' pk=document.link %}?return_url={{ request.path }}" class="btn btn-danger btn-sm lh-1" title="Unlink Document">
+                    <i class="mdi mdi-link-variant-remove" aria-hidden="true"></i>
+                  </a>
+              </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+        <div class="text-muted">
+            None
+        </div>
+    {% endif %}
+    </div>
+        <div class="card-footer text-end noprint">
+            <a href="{% url 'plugins:netbox_ged:document_add_link' %}?object_id={{ object.pk }}&content_type={{ content_type.id }}&return_url={{ request.path }}" class="btn btn-primary btn-sm">
+                <i class="mdi mdi-plus-thick" aria-hidden="true"></i>
+                Add
+            </a>
+            <a href="{% url 'plugins:netbox_ged:documentlink_add' %}?object_id={{ object.pk }}&content_type={{ content_type.id }}&return_url={{ request.path }}" class="btn btn-secondary btn-sm">
+                <i class="mdi mdi-link-variant" aria-hidden="true"></i>
+                Link
+            </a>
+        </div>
+
+</div>
