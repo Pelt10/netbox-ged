@@ -8,7 +8,6 @@ if settings.VERSION >= '3.4.0':
         model = Document
         fields = (
             ("name", 100),
-            ("document_type__name", 500),
         )
 
 
