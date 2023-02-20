@@ -21,7 +21,7 @@ A migration script will, perhaps one day, made available, but for now you will n
 
 | NetBox Version | Plugin Version |
 |----------------|----------------|
-|     3.2+       | 0.2.0          |
+|     3.2+       | 0.2.1          |
 
 
 ## Installation
